@@ -1,0 +1,14 @@
+
+.venv/*
+db.sqlite3
+.env
+.idea/
+back_media/
+static/
+media/
+venv/
+init.sql/
+storage/
+*.pyc
+.vscode/
+server/
