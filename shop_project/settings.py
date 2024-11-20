@@ -40,11 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 # LOGAL_APPS
 INSTALLED_APPS += [
-    'seller.apps.SellerConfig'
+    'seller.apps.SellerConfig',
+    'product.apps.ProductConfig',
 ]
 
 ASGI_APPLICATION = 'shop_project.asgi.application'
