@@ -9,9 +9,9 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        db_name = 'categories'
-        verbos_name = 'Категория'
-        verbos_name_plural = 'Категории'
+        db_table = 'categories'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование')
@@ -28,6 +28,6 @@ class Product(models.Model):
         return self.name
 
     class Meta:
-        db_name = 'products'
-        verbos_name = 'Продукт'
-        verbos_name_plural = 'Продукты'
+        db_table = 'products'
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
