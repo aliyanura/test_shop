@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-af91a6ofu6as8q)yp#an)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,23 +59,23 @@ CHANNEL_LAYERS = {
 }
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Панель администратора",  # Заголовок вкладки браузера
-    "site_header": "Админка Маркетплейса",  # Заголовок в верхнем левом углу
-    "welcome_sign": "Добро пожаловать в админку",  # Приветственное сообщение
+    "site_title": "Панель администратора", 
+    "site_header": "Админка Маркетплейса",
+    "welcome_sign": "Добро пожаловать в админку",
     "copyright": "Ваше название © 2024",
-    "search_model": "core.Product",  # Модель для поиска
+    "search_model": "core.Product",
     "topmenu_links": [
-        {"name": "Домой", "url": "/", "permissions": ["auth.view_user"]},  # Добавить ссылку на главную страницу
+        {"name": "Домой", "url": "/", "permissions": ["auth.view_user"]},
     ],
     "usermenu_links": [
-        {"name": "Профиль", "url": "/admin/auth/user/", "new_window": False},  # Пример ссылки
+        {"name": "Профиль", "url": "/admin/auth/user/", "new_window": False},
     ],
-    "show_sidebar": True,  # Показ бокового меню
+    "show_sidebar": True,
     "icons": {
-        "auth": "fas fa-users-cog",  # Иконка для приложения аутентификации
-        "core.Seller": "fas fa-store",  # Иконка для вашей модели "Seller"
-        "core.Category": "fas fa-tags",  # Иконка для вашей модели "Category"
-        "core.Product": "fas fa-boxes",  # Иконка для вашей модели "Product"
+        "auth": "fas fa-users-cog",
+        "seller.Seller": "fas fa-store",
+        "product.Category": "fas fa-tags",
+        "product.Product": "fas fa-boxes",
     },
 }
 
@@ -160,7 +160,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
