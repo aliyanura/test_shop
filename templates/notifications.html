@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+</head>
+<body>
+    <h2>Real-time Notifications</h2>
+    <div id="notifications"></div>
+
+    <script>
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const notifications = document.getElementById('notifications');
+            const newNotification = document.createElement('div');
+            newNotification.textContent = data.message;
+            notifications.appendChild(newNotification);
+        };
+
+        socket.onclose = function() {
+            console.error('WebSocket closed unexpectedly');
+        };
+    </script>
+</body>
+</html>

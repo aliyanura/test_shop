@@ -32,13 +32,50 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
 ]
+
+# LOGAL_APPS
+INSTALLED_APPS += [
+    'seller.apps.SellerConfig'
+]
+
+ASGI_APPLICATION = 'shop_project.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Панель администратора",  # Заголовок вкладки браузера
+    "site_header": "Админка Маркетплейса",  # Заголовок в верхнем левом углу
+    "welcome_sign": "Добро пожаловать в админку",  # Приветственное сообщение
+    "copyright": "Ваше название © 2024",
+    "search_model": "core.Product",  # Модель для поиска
+    "topmenu_links": [
+        {"name": "Домой", "url": "/", "permissions": ["auth.view_user"]},  # Добавить ссылку на главную страницу
+    ],
+    "usermenu_links": [
+        {"name": "Профиль", "url": "/admin/auth/user/", "new_window": False},  # Пример ссылки
+    ],
+    "show_sidebar": True,  # Показ бокового меню
+    "icons": {
+        "auth": "fas fa-users-cog",  # Иконка для приложения аутентификации
+        "core.Seller": "fas fa-store",  # Иконка для вашей модели "Seller"
+        "core.Category": "fas fa-tags",  # Иконка для вашей модели "Category"
+        "core.Product": "fas fa-boxes",  # Иконка для вашей модели "Product"
+    },
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +92,7 @@ ROOT_URLCONF = 'shop_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,7 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 

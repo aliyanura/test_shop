@@ -6,6 +6,6 @@ class Seller(models.Model):
     bio = models.TextField()
 
     class Meta:
-        db_name = 'sellers'
-        verbos_name = 'Продавец'
-        verbos_name_plural = 'Продавцы'
+        db_table = 'sellers'
+        verbose_name = 'Продавец'
+        verbose_name_plural = 'Продавцы'
