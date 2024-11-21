@@ -12,3 +12,4 @@ storage/
 *.pyc
 .vscode/
 server/
+staticfiles/
