@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>CRUD Продуктов</h1>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        input, textarea, select {
+            display: block;
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+            max-width: 400px;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>CRUD Продуктов</h1>
+
+    <!-- Создание Продукта -->
+    <section>
+        <h2>Создать Продукт</h2>
+        <input id="create-name" type="text" placeholder="Название продукта" />
+        <textarea id="create-description" placeholder="Описание"></textarea>
+        <input id="create-price" type="number" step="0.01" placeholder="Цена" />
+        <select id="create-categories" multiple>
+            <!-- Категории будут добавлены через JS -->
+        </select>
+        <button onclick="createProduct()">Создать</button>
+    </section>
+
+    <!-- Список Продуктов -->
+    <section>
+        <h2>Список Продуктов</h2>
+        <button onclick="getProducts()">Получить Все Продукты</button>
+    </section>
+
+    <!-- Обновление Продукта -->
+    <section>
+        <h2>Обновить Продукт</h2>
+        <input id="update-id" type="number" placeholder="ID продукта" />
+        <input id="update-name" type="text" placeholder="Новое название" />
+        <textarea id="update-description" placeholder="Новое описание"></textarea>
+        <input id="update-price" type="number" step="0.01" placeholder="Новая цена" />
+        <select id="update-categories" multiple>
+            <!-- Категории будут добавлены через JS -->
+        </select>
+        <button onclick="updateProduct()">Обновить</button>
+    </section>
+
+    <!-- Удаление Продукта -->
+    <section>
+        <h2>Удалить Продукт</h2>
+        <input id="delete-id" type="number" placeholder="ID продукта" />
+        <button onclick="deleteProduct()">Удалить</button>
+    </section>
+
+    <!-- Ответ от сервера -->
+    
+    <div id="response" class="hidden"></div>
+
+    <script>
+        const API_BASE_URL = '/api/products/';
+        const CATEGORY_API_URL = '/api/categories/';
+
+        // Получаем CSRF токен из cookies
+        const getCsrfToken = () => {
+            const csrfToken = document.cookie.match(/csrftoken=([^;]+)/);
+            return csrfToken ? csrfToken[1] : '';
+        };
+
+        // Функция для отображения ответа
+        const showResponse = (data) => {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = JSON.stringify(data, null, 2);
+            responseDiv.classList.remove('hidden');
+        };
+
+        // Загрузка категорий
+        const loadCategories = async () => {
+            const response = await fetch(CATEGORY_API_URL);
+            const categories = await response.json();
+            const createCategoriesSelect = document.getElementById('create-categories');
+            const updateCategoriesSelect = document.getElementById('update-categories');
+
+            createCategoriesSelect.innerHTML = '';
+            updateCategoriesSelect.innerHTML = '';
+
+            categories.forEach(category => {
+                const optionCreate = document.createElement('option');
+                optionCreate.value = category.id;
+                optionCreate.textContent = category.name;
+                createCategoriesSelect.appendChild(optionCreate);
+
+                const optionUpdate = document.createElement('option');
+                optionUpdate.value = category.id;
+                optionUpdate.textContent = category.name;
+                updateCategoriesSelect.appendChild(optionUpdate);
+            });
+        };
+
+        // Функция для создания продукта
+        const createProduct = async () => {
+            const name = document.getElementById('create-name').value;
+            const description = document.getElementById('create-description').value;
+            const price = document.getElementById('create-price').value;
+            const sellerId = 1;  // Пример: передаем ID продавца, который может быть получен динамически
+            const categories = Array.from(document.getElementById('create-categories').selectedOptions).map(option => option.value);
+        
+            const response = await fetch(API_BASE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken(),  // CSRF токен
+                },
+                body: JSON.stringify({ name, description, price, seller: sellerId, categories }),
+            });
+        
+            const data = await response.json();
+            showResponse(data);
+        };
+
+        // Функция для получения продуктов
+        const getProducts = async () => {
+            const response = await fetch(API_BASE_URL, { method: 'GET' });
+            const data = await response.json();
+            showResponse(data);
+        };
+
+        // Функция для обновления продукта
+        const updateProduct = async () => {
+            const id = document.getElementById('update-id').value;
+            const name = document.getElementById('update-name').value;
+            const description = document.getElementById('update-description').value;
+            const price = document.getElementById('update-price').value;
+            const categories = Array.from(document.getElementById('update-categories').selectedOptions).map(option => option.value);
+            const seller = 1;
+
+            const response = await fetch(`${API_BASE_URL}${id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken(),  // Добавляем CSRF токен
+                },
+                body: JSON.stringify({ name, description, price, categories, seller }),
+            });
+            const data = await response.json();
+            showResponse(data);
+        };
+
+        // Функция для удаления продукта
+        const deleteProduct = async () => {
+            const id = document.getElementById('delete-id').value;
+
+            const response = await fetch(`${API_BASE_URL}${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCsrfToken(),  // Добавляем CSRF токен
+                },
+            });
+            if (response.status === 204) {
+                showResponse({ message: `Продукт с ID ${id} удалён.` });
+            } else {
+                const data = await response.json();
+                showResponse(data);
+            }
+        };
+
+        // Загрузка категорий при загрузке страницы
+        loadCategories();
+    </script>
+</body>
+</html>
