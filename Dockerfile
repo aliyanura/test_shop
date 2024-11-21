@@ -1,4 +1,3 @@
-# Указываем базовый образ Python
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -16,4 +15,5 @@ COPY . /app/
 
 EXPOSE 8000
 
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "shop_project.asgi:application"]
+# CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "shop_project.asgi:application"]
+CMD ["python", "manage.py", "runserver"]

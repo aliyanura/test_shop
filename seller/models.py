@@ -5,6 +5,9 @@ class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
     bio = models.TextField()
 
+    def __str__(self):
+        return self.user.username
+
     class Meta:
         db_table = 'sellers'
         verbose_name = 'Продавец'

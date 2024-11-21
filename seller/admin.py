@@ -2,7 +2,7 @@ from django.contrib import admin
 from seller.models import Seller
 
 @admin.register(Seller)
-class LeagueAdmin(admin.ModelAdmin):
+class SellerAdmin(admin.ModelAdmin):
     list_display = ("user",)
     list_display_links = ("user",)
     list_filter = ("user",)

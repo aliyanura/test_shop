@@ -1,18 +1,24 @@
-from rest_framework.viewsets import ModelViewSet
-from .models import Category, Product
+from django.shortcuts import render
+from rest_framework import generics
+from product.models import Category, Product
 from product.serializers import CategorySerializer,\
-                                ProductSerializer,\
-                                ProductWriteSerializer
+                                ProductSerializer
 
 
-class CategoryViewSet(ModelViewSet):
+def product_crud_view(request):
+    return render(request, 'product_crud.html')
+
+
+class CategoryViewSet(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related('categories', 'seller').all()
 
-    def get_serializer_class(self):
-        if self.action in ['create', 'update']:
-            return ProductWriteSerializer
-        return ProductSerializer
+class ProductListCreateView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
